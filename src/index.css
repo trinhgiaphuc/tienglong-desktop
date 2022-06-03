@@ -1,5 +1,11 @@
 @tailwind base;
 @tailwind components;
+
+@font-face {
+  font-family: 'Comfortaa';
+  src: url(assets/font/Comfortaa.ttf);
+}
+
 @tailwind utilities;
 
 @layer components {
@@ -7,5 +13,36 @@
     box-shadow: RGB(255, 0, 100) 0px 0px 20px, inset 0 0 20px red,
       inset 0px 0 20px red, inset 0px 0 20px red, inset 0 0 20px red,
       inset 0px 0 20px red, 0 0 20px red, 0px 0 20px red, 0px 0 20px red;
+  }
+}
+
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+
+  /* width */
+  .small-scrollbar::-webkit-scrollbar {
+    width: 7px;
+  }
+
+  /* Track */
+  .small-scrollbar::-webkit-scrollbar-track {
+    background: #faa;
+  }
+
+  /* Handle */
+  .small-scrollbar::-webkit-scrollbar-thumb {
+    background: #123;
+    border-radius: 50px;
+  }
+
+  /* Handle on hover */
+  .small-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #f12472;
   }
 }

@@ -4,8 +4,8 @@ import UserWordList from '../components/profile/UserWordList';
 
 export default function ProfilePage() {
   return (
-    <div className="app bg-gray-100 dark:bg-gray-900">
-      <main className="grid grid-cols-1 lg:grid-cols-2 gap-6 my-12 mx-12 w-2xl container px-2">
+    <div className="bg-gray-100 dark:bg-gray-900 w-screen h-screen overflow-x-hidden overflow-y-scroll no-scrollbar lg:overflow-y-hidden">
+      <main className="lg:grid  grid-cols-2 flex flex-col gap-6 m-12 px-2">
         <ProfileCard />
         <UserWordList />
       </main>
