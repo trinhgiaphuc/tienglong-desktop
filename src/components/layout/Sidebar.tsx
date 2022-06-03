@@ -1,17 +1,19 @@
 import * as React from 'react';
+import { NavLink } from 'react-router-dom';
 
 export default function Sidebar() {
   return (
-    <div className="h-screen hidden lg:block shadow-lg relative w-80 font-ole">
+    <div className="h-screen hidden lg:block shadow-lg relative w-80 font-ole select-none">
       <div className="bg-white h-full dark:bg-gray-800">
         <div className="flex items-center justify-start pt-6 ml-8">
           <p className="font-bold dark:text-white text-xl">Tiếng Lòng</p>
         </div>
         <nav className="mt-6">
           <div>
-            <a
+            <NavLink
+              draggable={false}
               className="w-full text-gray-800 dark:text-white flex items-center pl-6 p-2 my-2 transition-colors duration-200 justify-start border-l-4 border-purple-500"
-              href="#"
+              to="/main_window"
             >
               <span className="text-left">
                 <svg
@@ -25,10 +27,11 @@ export default function Sidebar() {
                 </svg>
               </span>
               <span className="mx-2 text-sm font-normal">Trang Chủ</span>
-            </a>
-            <a
+            </NavLink>
+            <NavLink
               className="w-full text-gray-400 flex items-center pl-6 p-2 my-2 transition-colors duration-200 justify-start hover:text-white border-l-4 border-transparent"
-              href="#"
+              to="/me"
+              draggable={false}
             >
               <span className="text-left">
                 <svg
@@ -42,10 +45,11 @@ export default function Sidebar() {
                 </svg>
               </span>
               <span className="mx-2 text-sm font-normal">Trang Cá Nhân</span>
-            </a>
-            <a
+            </NavLink>
+            <NavLink
+              draggable={false}
               className="w-full text-gray-400 flex items-center pl-6 p-2 my-2 transition-colors duration-200 justify-start hover:text-white border-l-4 border-transparent"
-              href="#"
+              to="admin"
             >
               <span className="text-left">
                 <svg
@@ -58,11 +62,12 @@ export default function Sidebar() {
                   <path d="M1728 608v704q0 92-66 158t-158 66h-1216q-92 0-158-66t-66-158v-960q0-92 66-158t158-66h320q92 0 158 66t66 158v32h672q92 0 158 66t66 158z"></path>
                 </svg>
               </span>
-              <span className="mx-4 text-sm font-normal">Administration</span>
-            </a>
-            <a
+              <span className="mx-4 text-sm font-normal">Quản Trị</span>
+            </NavLink>
+            <NavLink
+              draggable={false}
               className="w-full text-gray-400 flex items-center pl-6 p-2 my-2 transition-colors duration-200 justify-start hover:text-white border-l-4 border-transparent"
-              href="#"
+              to="/feedback"
             >
               <span className="text-left">
                 <svg
@@ -76,7 +81,7 @@ export default function Sidebar() {
                 </svg>
               </span>
               <span className="mx-4 text-sm font-normal">Phản Hồi</span>
-            </a>
+            </NavLink>
           </div>
         </nav>
       </div>
