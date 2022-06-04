@@ -18,7 +18,7 @@ export default function WordCard() {
           </div>
         </div>
       </div>
-      <div className="shadow-lg  h-full w-full overflow-y-scroll bg-white dark:bg-gray-700 absolute top-0 left-0 opacity-0 hover:opacity-100">
+      <div className="shadow-lg  h-full w-full overflow-y-scroll small-scrollbar bg-white dark:bg-gray-700 absolute top-0 left-0 opacity-0 hover:opacity-100">
         <p className="text-black py-6 text-center px-4 text-lg  dark:text-white absolute w-full break-words">
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Iure
           voluptates corrupti doloribus nobis animi praesentium rerum ipsam vel

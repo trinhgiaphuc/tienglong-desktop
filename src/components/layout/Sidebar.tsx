@@ -1,90 +1,90 @@
 import * as React from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
+import { handleSignOut } from '../../lib/firebase';
+import { adminIcon, feedbackIcon, homeIcon, meIcon } from '../../assets/icons';
+
+type PageRoute = {
+  path: string;
+  name: string;
+  iconSrc: string;
+};
+
+const routes: Array<PageRoute> = [
+  {
+    path: '/main_window',
+    name: 'Trang Chủ',
+    iconSrc: homeIcon,
+  },
+  {
+    path: '/me',
+    name: 'Trang Cá Nhân',
+    iconSrc: meIcon,
+  },
+  { path: '/admin', name: 'Quản Trị', iconSrc: adminIcon },
+  {
+    path: 'feedback',
+    name: 'Phản Hồi',
+    iconSrc: feedbackIcon,
+  },
+];
 
 export default function Sidebar() {
   return (
     <div className="h-screen hidden lg:block shadow-lg relative w-80 font-ole select-none">
-      <div className="bg-white h-full dark:bg-gray-800">
+      <div className="bg-white h-full dark:bg-gray-800 relative">
         <div className="flex items-center justify-start pt-6 ml-8">
           <p className="font-bold dark:text-white text-xl">Tiếng Lòng</p>
         </div>
         <nav className="mt-6">
-          <div>
-            <NavLink
-              draggable={false}
-              className="w-full text-gray-800 dark:text-white flex items-center pl-6 p-2 my-2 transition-colors duration-200 justify-start border-l-4 border-purple-500"
-              to="/main_window"
-            >
-              <span className="text-left">
-                <svg
-                  width="20"
-                  height="20"
-                  fill="currentColor"
-                  viewBox="0 0 1792 1792"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path d="M1472 992v480q0 26-19 45t-45 19h-384v-384h-256v384h-384q-26 0-45-19t-19-45v-480q0-1 .5-3t.5-3l575-474 575 474q1 2 1 6zm223-69l-62 74q-8 9-21 11h-3q-13 0-21-7l-692-577-692 577q-12 8-24 7-13-2-21-11l-62-74q-8-10-7-23.5t11-21.5l719-599q32-26 76-26t76 26l244 204v-195q0-14 9-23t23-9h192q14 0 23 9t9 23v408l219 182q10 8 11 21.5t-7 23.5z"></path>
-                </svg>
-              </span>
-              <span className="mx-2 text-sm font-normal">Trang Chủ</span>
-            </NavLink>
-            <NavLink
-              className="w-full text-gray-400 flex items-center pl-6 p-2 my-2 transition-colors duration-200 justify-start hover:text-white border-l-4 border-transparent"
-              to="/me"
-              draggable={false}
-            >
-              <span className="text-left">
-                <svg
-                  width="20"
-                  height="20"
-                  fill="currentColor"
-                  viewBox="0 0 2048 1792"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path d="M1070 1178l306-564h-654l-306 564h654zm722-282q0 182-71 348t-191 286-286 191-348 71-348-71-286-191-191-286-71-348 71-348 191-286 286-191 348-71 348 71 286 191 191 286 71 348z"></path>
-                </svg>
-              </span>
-              <span className="mx-2 text-sm font-normal">Trang Cá Nhân</span>
-            </NavLink>
-            <NavLink
-              draggable={false}
-              className="w-full text-gray-400 flex items-center pl-6 p-2 my-2 transition-colors duration-200 justify-start hover:text-white border-l-4 border-transparent"
-              to="admin"
-            >
-              <span className="text-left">
-                <svg
-                  width="20"
-                  height="20"
-                  fill="currentColor"
-                  viewBox="0 0 1792 1792"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path d="M1728 608v704q0 92-66 158t-158 66h-1216q-92 0-158-66t-66-158v-960q0-92 66-158t158-66h320q92 0 158 66t66 158v32h672q92 0 158 66t66 158z"></path>
-                </svg>
-              </span>
-              <span className="mx-4 text-sm font-normal">Quản Trị</span>
-            </NavLink>
-            <NavLink
-              draggable={false}
-              className="w-full text-gray-400 flex items-center pl-6 p-2 my-2 transition-colors duration-200 justify-start hover:text-white border-l-4 border-transparent"
-              to="/feedback"
-            >
-              <span className="text-left">
-                <svg
-                  width="20"
-                  height="20"
-                  fill="currentColor"
-                  viewBox="0 0 2048 1792"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path d="M580 461q0-41-25-66t-66-25q-43 0-76 25.5t-33 65.5q0 39 33 64.5t76 25.5q41 0 66-24.5t25-65.5zm743 507q0-28-25.5-50t-65.5-22q-27 0-49.5 22.5t-22.5 49.5q0 28 22.5 50.5t49.5 22.5q40 0 65.5-22t25.5-51zm-236-507q0-41-24.5-66t-65.5-25q-43 0-76 25.5t-33 65.5q0 39 33 64.5t76 25.5q41 0 65.5-24.5t24.5-65.5zm635 507q0-28-26-50t-65-22q-27 0-49.5 22.5t-22.5 49.5q0 28 22.5 50.5t49.5 22.5q39 0 65-22t26-51zm-266-397q-31-4-70-4-169 0-311 77t-223.5 208.5-81.5 287.5q0 78 23 152-35 3-68 3-26 0-50-1.5t-55-6.5-44.5-7-54.5-10.5-50-10.5l-253 127 72-218q-290-203-290-490 0-169 97.5-311t264-223.5 363.5-81.5q176 0 332.5 66t262 182.5 136.5 260.5zm592 561q0 117-68.5 223.5t-185.5 193.5l55 181-199-109q-150 37-218 37-169 0-311-70.5t-223.5-191.5-81.5-264 81.5-264 223.5-191.5 311-70.5q161 0 303 70.5t227.5 192 85.5 263.5z"></path>
-                </svg>
-              </span>
-              <span className="mx-4 text-sm font-normal">Phản Hồi</span>
-            </NavLink>
-          </div>
+          {routes.map((routeDetails) => (
+            <MainLink {...routeDetails} key={routeDetails.path} />
+          ))}
         </nav>
+        <button
+          onClick={handleSignOut}
+          className="w-full flex items-center pl-6 p-2 my-2 justify-start hover:text-[#fff1ac] text-gray-800 dark:text-gray-400 border-purple-500 absolute bottom-0"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            xmlSpace="preserve"
+            width={24}
+            height={24}
+            fill="#fff1ac"
+            viewBox="0 0 491.2 491.2"
+          >
+            <path d="M319 73a172 172 0 0 0-155 96l27 13a143 143 0 1 1 0 127l-27 13a173 173 0 0 0 155 96 173 173 0 0 0 0-345z" />
+            <path d="M319 261v-30H57l35-35-21-21-71 71 71 70 21-21-35-34z" />
+          </svg>
+          <span className="ml-1">Đăng Xuất</span>
+        </button>
       </div>
     </div>
+  );
+}
+
+function MainLink({ name, iconSrc, path }: PageRoute) {
+  const { pathname } = useLocation();
+
+  return (
+    <NavLink
+      className={`w-full flex items-center pl-6 p-2 my-2 transition-colors duration-200 justify-start hover:text-[#fff1ac] ${
+        pathname === path
+          ? 'text-gray-800 dark:text-[#fff1ac] border-l-4 border-purple-500'
+          : 'text-gray-400 border-l-4 border-transparent'
+      }`}
+      to={path}
+      draggable={false}
+    >
+      <span className="text-left">
+        <img
+          width={20}
+          height={20}
+          className="stroke-white"
+          src={iconSrc}
+          alt="icon"
+        />
+      </span>
+      <span className="mx-2 text-sm font-normal">{name}</span>
+    </NavLink>
   );
 }

@@ -1,21 +1,48 @@
 import './index.css';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom/client';
-import { HashRouter, Route, Routes } from 'react-router-dom';
+import {
+  HashRouter,
+  Route,
+  Routes,
+  useLocation,
+  useNavigate,
+} from 'react-router-dom';
+
 import { MainDashBoard, Sidebar, Template } from './components/layout';
 
-import ProfilePage from './pages/profile';
+import { ProfilePage, HomePage, LoginPage } from './pages';
+import UserProvider, { useUser } from './lib/userContext';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
-root.render(
-  <Template>
-    <HashRouter>
-      <Sidebar />
+function App() {
+  const { pathname } = useLocation();
+  const { user } = useUser();
+  const navigate = useNavigate();
+
+  React.useEffect(() => {
+    if (!user) {
+      navigate('/');
+    }
+  }, [user]);
+
+  return (
+    <Template>
+      {pathname === '/' ? null : <Sidebar />}
       <Routes>
-        <Route path="/main_window" element={<MainDashBoard />}></Route>
-        <Route path="me" element={<ProfilePage />}></Route>
+        <Route path="/" element={<LoginPage />} />
+        <Route path="/main_window" element={<MainDashBoard />} />
+        <Route path="me" element={<ProfilePage />} />
       </Routes>
-    </HashRouter>
-  </Template>
+    </Template>
+  );
+}
+
+root.render(
+  <HashRouter>
+    <UserProvider>
+      <App />
+    </UserProvider>
+  </HashRouter>
 );

@@ -5,7 +5,7 @@ export default function MainDashBoard() {
   return (
     <div className="flex flex-col w-full md:space-y-4">
       <MainDashBoardHead />
-      <div className="overflow-auto h-screen pb-24 px-4 md:px-6">
+      <div className="overflow-y-scroll small-scrollbar h-screen pb-24 px-4 md:px-6">
         <h1 className="text-4xl font-semibold text-gray-800 dark:text-white">
           Xin Chào, John
         </h1>
