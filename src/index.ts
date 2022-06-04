@@ -6,11 +6,6 @@ import isDev from 'electron-is-dev';
 // whether you're running in development or production).
 declare const MAIN_WINDOW_WEBPACK_ENTRY: string;
 
-const loginLinks = [
-  'https://tienglong-34e90.firebaseapp.com/__/auth/handler?apiKey=AIzaSyAx-XZyVnFvhKglziQJZDtcxTDSllLAchU&appName=%5BDEFAULT%5D&authType=signInViaPopup&redirectUrl=http%3A%2F%2Flocalhost%3A3000%2Fmain_window%23%2F&v=9.8.2&eventId=2065282840&providerId=google.com&scopes=profile',
-  'https://tienglong-34e90.firebaseapp.com/__/auth/handler?apiKey=AIzaSyAx-XZyVnFvhKglziQJZDtcxTDSllLAchU&appName=%5BDEFAULT%5D&authType=signInViaPopup&redirectUrl=http%3A%2F%2Flocalhost%3A3000%2Fmain_window%23%2F&v=9.8.2&eventId=5378683448&providerId=facebook.com',
-];
-
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
   // eslint-disable-line global-require
@@ -19,8 +14,7 @@ if (require('electron-squirrel-startup')) {
 
 const createWindow = (): void => {
   const mainWindow = new BrowserWindow({
-    height: 600,
-    width: 800,
+    fullscreen:true,
     center: true,
     hasShadow: false,
     autoHideMenuBar: true,
@@ -31,8 +25,11 @@ const createWindow = (): void => {
   });
 
   mainWindow.webContents.setWindowOpenHandler(({ url }) => {
-    if (loginLinks.includes(url)) {
+    const {origin} = new URL(url);
+    if (origin === 'https://tienglong-34e90.firebaseapp.com') {
       return { action: 'allow' };
+    } else {
+      return {action: 'deny'}
     }
   });
 

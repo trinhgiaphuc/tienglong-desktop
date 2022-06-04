@@ -1,22 +1,11 @@
 import * as React from 'react';
-import { useNavigate } from 'react-router-dom';
 import {
   facebookProvider,
   googleProvider,
   handleSignIn,
 } from '../lib/firebase';
-import { useUser } from '../lib/userContext';
 
 export default function Login() {
-  const { user } = useUser();
-  const navigate = useNavigate();
-
-  React.useEffect(() => {
-    if (user) {
-      navigate('/main_window');
-    }
-  }, [user]);
-
   return (
     <div className="h-screen w-screen grid place-items bg-gradient-to-tl from-green-500 to-indigo-700 py-16 px-4">
       <div className="flex flex-col items-center justify-center">
