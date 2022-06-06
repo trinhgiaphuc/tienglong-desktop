@@ -3,6 +3,12 @@ import WordCard from '../components/commons/WordCard';
 import { DashBoardHead, DashBoardHotWord } from '../components/dashboard';
 
 export default function HomePage() {
+  React.useEffect(() => {
+    window.electronAPI.ipcRenderer
+      .invoke('today-words')
+      .then(console.log, console.error);
+  }, []);
+
   return (
     <div className="flex flex-col w-full md:space-y-4">
       <DashBoardHead />

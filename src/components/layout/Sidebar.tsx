@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
-import { handleSignOut } from '../../lib/firebase';
 import { adminIcon, feedbackIcon, homeIcon, meIcon } from '../../assets/icons';
+import { handleSignOut } from '../../lib/firebase';
 
 type PageRoute = {
   path: string;

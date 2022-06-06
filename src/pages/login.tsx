@@ -1,9 +1,6 @@
 import * as React from 'react';
-import {
-  facebookProvider,
-  googleProvider,
-  handleSignIn,
-} from '../lib/firebase';
+
+import { signInWithGoogle, signInWithFacebook } from '../lib/firebase';
 
 export default function Login() {
   return (
@@ -17,7 +14,7 @@ export default function Login() {
             Xin mời quý khách đăng nhập
           </p>
           <button
-            onClick={() => handleSignIn(googleProvider)}
+            onClick={signInWithGoogle}
             aria-label="Continue with google"
             role="button"
             className="focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-gray-700 py-3.5 px-4 border rounded-lg border-gray-700 flex items-center w-full mt-10"
@@ -50,7 +47,7 @@ export default function Login() {
             </p>
           </button>
           <button
-            onClick={() => handleSignIn(facebookProvider)}
+            onClick={signInWithFacebook}
             aria-label="Continue with twitter"
             role="button"
             className="focus:outline-none  focus:ring-2 focus:ring-offset-1 focus:ring-gray-700 py-3.5 px-4 border rounded-lg border-gray-700 flex items-center w-full mt-4"
