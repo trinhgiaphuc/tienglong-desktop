@@ -24,7 +24,8 @@ declare global {
         ): void;
       };
       shell: {
-        signUp: () => Promise<void>;
+        signUp: () => void;
+        resetPassword: () => void;
       };
     };
   }
@@ -90,13 +91,13 @@ async function handleSetAuth(
   TOKEN = token;
 
   try {
-    const res = await fetch(`http://localhost:3001/api/user/${uid}`, {
+    const res = await fetch(`${BASE_URL}/user/${uid}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'Application/json',
       },
     });
-    const userData = await res.json();
+    const userData  = await res.json();
     mainWindow.webContents.send('user-data', userData);
   } catch (error) {
     console.error(error);

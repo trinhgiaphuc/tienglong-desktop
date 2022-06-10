@@ -24,5 +24,8 @@ contextBridge.exposeInMainWorld('electron', {
     signUp() {
       shell.openExternal('https://tienglong.vercel.app/enter');
     },
+    resetPassword() {
+      shell.openExternal('https://tienglong.vercel.app/user/forgot-password');
+    },
   },
 });

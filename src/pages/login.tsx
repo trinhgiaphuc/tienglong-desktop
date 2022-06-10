@@ -65,6 +65,17 @@ export default function Login() {
               />
             </form>
             <div className="text-center pt-12 pb-12">
+              <button
+                onClick={() => {
+                  console.log('OK');
+                  window.electron.shell.resetPassword();
+                }}
+                className="underline font-semibold"
+              >
+                Quên mật khẩu?
+              </button>
+            </div>
+            <div className="text-center pt-12 pb-12">
               <p>
                 Chưa có tài khoản?{' '}
                 <button

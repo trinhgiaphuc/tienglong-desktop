@@ -21,3 +21,24 @@ export type TodayWords = {
 };
 
 export type LoginData = [{ email: string; password: string }];
+
+
+export type StatusType = 'loading' | 'authenticated' | 'unauthenticated';
+
+export type UserDetails = {
+  createdAt: {_seconds: number, _nanoseconds: number}
+  email: string
+  hashedPass: string
+  hearts: number
+  id: string
+  image: string
+  role: string[]
+  updatedAt: {_seconds: number, _nanoseconds: number}
+  username: string
+  words: number
+}
+
+export type UserData = {
+  userDetails: UserDetails
+  userWords: Word[];
+}

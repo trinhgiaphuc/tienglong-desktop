@@ -7,8 +7,7 @@ import { Sidebar, Template } from './components/layout';
 
 import { ProfilePage, HomePage, LoginPage } from './pages';
 import UserProvider, { useUser } from './lib/userContext';
-import { Word } from './typings';
-import { UserData } from './lib/hooks';
+import type { UserData, Word } from './typings';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
