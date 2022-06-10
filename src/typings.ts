@@ -15,3 +15,9 @@ export type Word = {
   status: string;
   source: string | null;
 };
+
+export type TodayWords = {
+  todayWords: Word[];
+};
+
+export type LoginData = [{ email: string; password: string }];

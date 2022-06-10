@@ -1,19 +1,22 @@
-import type { User } from 'firebase/auth';
 import * as React from 'react';
-import { useLogin } from './hooks';
+import { StatusType, useLogin, UserData } from './hooks';
 
 type PropsType = {
   children: React.ReactNode;
 };
 
 type UserContextType = {
-  user: User | null;
-  setUser: React.Dispatch<React.SetStateAction<User>>;
+  user: UserData | null;
+  setUser: React.Dispatch<React.SetStateAction<UserData>>;
+  status: StatusType;
+  setStatus: React.Dispatch<React.SetStateAction<StatusType>>;
 };
 
 const UserContext = React.createContext<UserContextType>({
   user: null,
   setUser: null,
+  status: 'unauthenticated',
+  setStatus: null,
 });
 
 export function useUser() {

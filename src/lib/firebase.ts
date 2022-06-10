@@ -3,8 +3,8 @@ import {
   getAuth,
   FacebookAuthProvider,
   GoogleAuthProvider,
-  signInWithPopup,
   signOut,
+  signInWithEmailAndPassword,
 } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 import { getStorage } from 'firebase/storage';
@@ -32,24 +32,17 @@ export const googleProvider = new GoogleAuthProvider();
 
 export async function handleSignOut() {
   try {
-    // await fetcher('enter', { logout: true });
     await signOut(auth);
   } catch (error) {
     console.error(error);
   }
 }
 
-export async function signInWithGoogle() {
+export async function signIn(email: string, password: string): Promise<void> {
   try {
-    await signInWithPopup(auth, googleProvider);
+    await signInWithEmailAndPassword(auth, email, password);
   } catch (error) {
     console.error(error);
-  }
-}
-export async function signInWithFacebook() {
-  try {
-    await signInWithPopup(auth, facebookProvider);
-  } catch (error) {
-    console.error(error);
+    throw error;
   }
 }
