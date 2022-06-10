@@ -9,7 +9,8 @@
     "package": "electron-forge package",
     "make": "electron-forge make",
     "publish": "electron-forge publish",
-    "lint": "eslint --ext .ts,.tsx ."
+    "lint": "eslint --ext .ts,.tsx .",
+    "cc": "prettier --write ."
   },
   "keywords": [],
   "author": {
@@ -96,6 +97,7 @@
   },
   "dependencies": {
     "dotenv": "^16.0.1",
+    "electron-fetch": "^1.7.4",
     "electron-is-dev": "^2.0.0",
     "electron-squirrel-startup": "^1.0.0",
     "firebase": "^9.8.2",

@@ -1,6 +1,13 @@
 import * as React from 'react';
+import Loading from '../commons/Loading';
 
-export default function DashBoardHead() {
+export default function DashBoardHead({
+  username,
+  userImg,
+}: {
+  username: string;
+  userImg: string;
+}) {
   return (
     <header className="w-full h-16 z-40 flex items-center justify-between">
       <ToggleSidebarButton />
@@ -31,27 +38,34 @@ export default function DashBoardHead() {
             </svg>
           </button>
           <span className="w-1 h-8 rounded-lg bg-gray-200"></span>
-          <a href="#" className="block relative">
-            <img
-              alt="profil"
-              // src={imgSrc}
-              src="https://images.unsplash.com/photo-1619170519578-50bca88cff89?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80"
-              className="mx-auto object-cover rounded-full h-10 w-10 "
-            />
-          </a>
-          <button className="flex items-center text-gray-500 dark:text-white text-md">
-            John Cena
-            <svg
-              width="20"
-              height="20"
-              className="ml-2 text-gray-400"
-              fill="currentColor"
-              viewBox="0 0 1792 1792"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path d="M1408 704q0 26-19 45l-448 448q-19 19-45 19t-45-19l-448-448q-19-19-19-45t19-45 45-19h896q26 0 45 19t19 45z"></path>
-            </svg>
-          </button>
+          {!username ? (
+            <div className="w-10 h-10 flex items-center justify-center">
+              <Loading />
+            </div>
+          ) : (
+            <React.Fragment>
+              <a href="#" className="block relative">
+                <img
+                  alt="profil"
+                  src={userImg}
+                  className="mx-auto object-cover rounded-full h-10 w-10 "
+                />
+              </a>
+              <button className="flex items-center text-gray-500 dark:text-white text-md">
+                {username}
+                <svg
+                  width="20"
+                  height="20"
+                  className="ml-2 text-gray-400"
+                  fill="currentColor"
+                  viewBox="0 0 1792 1792"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path d="M1408 704q0 26-19 45l-448 448q-19 19-45 19t-45-19l-448-448q-19-19-19-45t19-45 45-19h896q26 0 45 19t19 45z"></path>
+                </svg>
+              </button>
+            </React.Fragment>
+          )}
         </div>
       </div>
     </header>

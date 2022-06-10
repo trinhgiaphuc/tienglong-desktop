@@ -1,31 +1,36 @@
 import * as React from 'react';
 
-import imgSrc from '../../assets/images/avatar.png';
-import medalIcon from '../../assets/icons/medal.svg';
-import newMemberIcon from '../../assets/icons/new-member.svg';
+import { medalIcon, newMemberIcon } from '../../assets/icons';
+import type { UserDetails } from '../../typings';
 
-export default function ProfileCard() {
+export default function ProfileCard({
+  userDetails,
+}: {
+  userDetails: UserDetails;
+}) {
+  const { image, username, words, hearts } = userDetails;
+
   return (
     <aside className="font-ole">
       <div className="bg-gray-100 dark:bg-gray-700 shadow rounded-lg p-10">
         <div className="flex flex-col gap-1 text-center items-center">
           <img
             className="h-32 w-32 bg-gray-100 dark:bg-red-800 p-2 rounded-full shadow mb-4"
-            src={imgSrc}
+            src={image}
             alt="user avatar"
           />
-          <p className="font-semibold text-yellow-300 text-2xl">John Cena</p>
+          <p className="font-semibold text-yellow-300 text-2xl">{username}</p>
           <div className="text-md leading-normal text-white flex justify-center items-center">
             Lời Giới Thiệu
           </div>
         </div>
         <div className="flex justify-center items-center gap-2 my-3 ">
           <div className="font-semibold text-center mx-4">
-            <p className="text-white">102</p>
+            <p className="text-white">{words}</p>
             <span className="text-yellow-300">Words</span>
           </div>
           <div className="font-semibold text-center mx-4">
-            <p className="text-white">102</p>
+            <p className="text-white">{hearts}</p>
             <span className="text-yellow-300">Hearts</span>
           </div>
         </div>
@@ -52,11 +57,7 @@ export default function ProfileCard() {
   );
 }
 
-type HotWordProps = {
-  bgColor: string;
-};
-
-function HotWord({ bgColor }: HotWordProps) {
+function HotWord({ bgColor }: { bgColor: string }) {
   return (
     <div className="relative flex flex-col justify-between bg-white rounded-3xl bg-cover text-gray-800 overflow-hidden cursor-pointer w-full object-cover object-center h-64 my-2 hot">
       <div

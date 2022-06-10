@@ -3,25 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { auth } from './firebase';
 import { onAuthStateChanged } from 'firebase/auth';
-import { Word } from '../typings';
-
-export type StatusType = 'loading' | 'authenticated' | 'unauthenticated';
-
-export type UserData = {
-  userDetails: {
-  createdAt: {_seconds: number, _nanoseconds: number}
-  email: string
-  hashedPass: string
-  hearts: number
-  id: string
-  image: string
-  role: string[]
-  updatedAt: {_seconds: number, _nanoseconds: number}
-  username: string
-  words: number
-  }
-  userWords: Word[]
-}
+import { UserData, StatusType } from '../typings';
 
 export function useLogin() {
   const [user, setUser] = React.useState<UserData>(null);
