@@ -5,7 +5,7 @@ import { HashRouter, Route, Routes, useLocation } from 'react-router-dom';
 
 import { Sidebar, Template } from './components/layout';
 
-import { ProfilePage, HomePage, LoginPage } from './pages';
+import { ProfilePage, HomePage, LoginPage, FeedbackPage } from './pages';
 import UserProvider, { useUser } from './lib/userContext';
 import type { UserData, Word } from './typings';
 
@@ -37,6 +37,7 @@ function App() {
           element={<HomePage todayWords={todayWords} />}
         />
         <Route path="/me" element={<ProfilePage />} />
+        <Route path="/feedback" element={<FeedbackPage />} />
       </Routes>
     </Template>
   );
