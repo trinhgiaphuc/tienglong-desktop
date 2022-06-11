@@ -14,7 +14,7 @@ export default function FeedbackPage() {
               Trò chuyện cùng chúng tôi!
             </h2>
             <div className="text-gray-700 mt-8">
-              Không thích gửi form? Kết nối với chúng tôi qua{' '}
+              Bạn không thích form? Kết nối với chúng tôi qua{' '}
               <span className="underline">email</span> mọi lúc mọi nơi .
             </div>
           </div>
