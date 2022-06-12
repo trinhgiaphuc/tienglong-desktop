@@ -4,7 +4,7 @@ import WordCard from '../components/commons/WordCard';
 import { DashBoardHead, DashBoardHotWord } from '../components/dashboard';
 import { useUser } from '../lib/userContext';
 
-export type PropsTypes = {
+type PropsTypes = {
   todayWords: Word[];
 };
 

@@ -77,19 +77,19 @@ app.on('activate', () => {
   }
 });
 
- async function fetcher(
+async function fetcher(
   path: string,
   data: unknown = undefined
 ): Promise<unknown> {
   const res = await fetch(`${BASE_URL}/${path}`, {
-     method: data ? 'POST' : 'GET',
-     headers: {
-       'Content-type': 'Application/json',
-       'cookie': `USER_ACCESS_TOKEN=${TOKEN}`
-     },
-     body: JSON.stringify(data)
+    method: data ? 'POST' : 'GET',
+    headers: {
+      'Content-type': 'Application/json',
+      cookie: `USER_ACCESS_TOKEN=${TOKEN}`,
+    },
+    body: JSON.stringify(data),
   });
-   return res.json();
+  return res.json();
 }
 
 async function handleSendTodayWords() {
@@ -127,5 +127,5 @@ async function handleCreateWord(
   ]
 ) {
   const res = await fetcher('word/create', theWord[0]);
-  console.log(res)
+  console.log(res);
 }

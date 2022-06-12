@@ -1,4 +1,6 @@
 import * as React from 'react';
+import { NavigateFunction, useNavigate } from 'react-router-dom';
+import Modal from '../components/commons/Modal';
 import { useUser } from '../lib/userContext';
 
 type SuggestTag = {
@@ -35,8 +37,8 @@ type WordState = {
 };
 
 type WordAction = {
-  type: 'UPDATE_WORD' | 'ERROR' | 'RESET_ERROR';
-  payload: {
+  type: 'UPDATE_WORD' | 'ERROR' | 'RESET_ERROR' | 'RESET_ALL';
+  payload?: {
     wordForm?: {
       word: string;
       definition: string;
@@ -70,15 +72,17 @@ const INITIAL_WORD_STATE: WordState = {
 
 const wordReducer: React.Reducer<WordState, WordAction> = (
   state = INITIAL_WORD_STATE,
-  { type, payload: { error, wordForm } }: WordAction
+  { type, payload }: WordAction
 ) => {
   switch (type) {
     case 'UPDATE_WORD':
-      return { error: state.error, wordForm };
+      return { error: state.error, wordForm: payload.wordForm };
     case 'ERROR':
-      return { wordForm: state.wordForm, error };
+      return { wordForm: state.wordForm, error: payload.error };
     case 'RESET_ERROR':
-      return { wordForm: state.wordForm, error };
+      return { wordForm: state.wordForm, error: payload.error };
+    case 'RESET_ALL':
+      return JSON.parse(JSON.stringify(INITIAL_WORD_STATE));
     default:
       throw new Error(`INVALID ACTION TYPE: ${type}`);
   }
@@ -86,6 +90,8 @@ const wordReducer: React.Reducer<WordState, WordAction> = (
 
 export default function DefinePage() {
   const { user } = useUser();
+  const [hideModal, setHideModal] = React.useState<boolean>(true);
+  const navigate = useNavigate();
 
   const [
     {
@@ -142,22 +148,6 @@ export default function DefinePage() {
     return true;
   }
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    const tags = transformStringTagToArray();
-    if (formIsValid()) {
-      window.electron.ipcRenderer.sendMessage('create-word', [
-        {
-          word,
-          definition,
-          example,
-          tags,
-          author: user.userDetails.username,
-        },
-      ]);
-    }
-  }
-
   function resetError(
     errorName: 'definitionError' | 'exampleError' | 'wordError'
   ) {
@@ -188,8 +178,32 @@ export default function DefinePage() {
       });
   }
 
+  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const tags = transformStringTagToArray();
+    if (formIsValid()) {
+      window.electron.ipcRenderer.sendMessage('create-word', [
+        {
+          word,
+          definition,
+          example,
+          tags,
+          author: user.userDetails.username,
+        },
+      ]);
+    }
+    setHideModal(false);
+  }
+
   return (
     <div className="container mx-auto h-screen">
+      {hideModal ? null : (
+        <FormSubmittedModal
+          dispatch={dispatch}
+          navigate={navigate}
+          setHideModal={setHideModal}
+        />
+      )}
       <div className="max-w-2xl p-5 mx-auto mt-16 small-scrollbar bg-gray-100 rounded-md shadow-sm h-[90%] overflow-y-scroll">
         <h1 className="my-3 text-3xl font-semibold text-gray-700 text-center">
           Định nghĩa
@@ -460,5 +474,44 @@ function DisplayError({ error }: { error: string }) {
     <h1 className="rounded-md text-center border border-black bg-red-500 text-base bg-opacity-80 p-2">
       {error}
     </h1>
+  );
+}
+
+function FormSubmittedModal({
+  setHideModal,
+  dispatch,
+  navigate,
+}: {
+  setHideModal: React.Dispatch<React.SetStateAction<boolean>>;
+  dispatch: React.Dispatch<WordAction>;
+  navigate: NavigateFunction;
+}) {
+  return (
+    <Modal noClose={true} setHideModal={setHideModal}>
+      <div className="flex flex-col gap-4">
+        <h1 className="text-2xl text-center font-bold">Tạo Từ Thành Công</h1>
+        <p className="text-lg font-bold">
+          Từ của bạn đã được tạo và đang trong quá trình kiểm duyệt, mong bạn
+          chờ trong giây lát nhé.
+        </p>
+        <div className="flex items-center justify-evenly">
+          <button
+            className="p-2 border border-black rounded-lg font-bold"
+            onClick={() => {
+              dispatch({ type: 'RESET_ALL' });
+              setHideModal(true);
+            }}
+          >
+            Tạo từ mới
+          </button>
+          <button
+            className="p-2 border border-black rounded-lg font-bold"
+            onClick={() => navigate('/main_window', { replace: true })}
+          >
+            Trở về trang chủ
+          </button>
+        </div>
+      </div>
+    </Modal>
   );
 }
