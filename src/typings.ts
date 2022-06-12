@@ -22,23 +22,29 @@ export type TodayWords = {
 
 export type LoginData = [{ email: string; password: string }];
 
-
 export type StatusType = 'loading' | 'authenticated' | 'unauthenticated';
 
 export type UserDetails = {
-  createdAt: {_seconds: number, _nanoseconds: number}
-  email: string
-  hashedPass: string
-  hearts: number
-  id: string
-  image: string
-  role: string[]
-  updatedAt: {_seconds: number, _nanoseconds: number}
-  username: string
-  words: number
-}
+  createdAt: { _seconds: number; _nanoseconds: number };
+  email: string;
+  hashedPass: string;
+  hearts: number;
+  id: string;
+  image: string;
+  role: string[];
+  updatedAt: { _seconds: number; _nanoseconds: number };
+  username: string;
+  words: number;
+};
 
 export type UserData = {
-  userDetails: UserDetails
+  userDetails: UserDetails;
   userWords: Word[];
-}
+};
+
+export type RequestChannels =
+  | 'get-today-words'
+  | 'login'
+  | 'set-auth'
+  | 'create-word';
+export type ResponseChannels = 'today-words' | 'login-status' | 'user-data';

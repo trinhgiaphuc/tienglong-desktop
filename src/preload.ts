@@ -1,7 +1,5 @@
 import { contextBridge, ipcRenderer, IpcRendererEvent, shell } from 'electron';
-
-export type RequestChannels = 'get-today-words' | 'login' | 'set-auth';
-export type ResponseChannels = 'today-words' | 'login-status' | 'user-data';
+import { RequestChannels, ResponseChannels } from './typings';
 
 contextBridge.exposeInMainWorld('electron', {
   ipcRenderer: {

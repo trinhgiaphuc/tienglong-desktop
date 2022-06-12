@@ -16,13 +16,14 @@ export function useLogin() {
       async (user) => {
         if (user) {
           const token = await user.getIdToken().catch(console.error);
-        window.electron.ipcRenderer.sendMessage('set-auth', [{ token, uid:user.uid }]);
-        navigate('/main_window');
-        setStatus('loading');
-        }
-        else {
+          window.electron.ipcRenderer.sendMessage('set-auth', [
+            { token, uid: user.uid },
+          ]);
+          navigate('/main_window');
+          setStatus('loading');
+        } else {
           setStatus('unauthenticated');
-          navigate('/')
+          navigate('/');
         }
       },
       (error: Error) => {
@@ -32,5 +33,5 @@ export function useLogin() {
     return () => unsubscribe();
   }, []);
 
-  return { user, setUser, status,setStatus };
+  return { user, setUser, status, setStatus };
 }

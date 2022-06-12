@@ -32,12 +32,13 @@
 
   /* Track */
   .small-scrollbar::-webkit-scrollbar-track {
-    background: #123;
+    background: #aff;
+    border-radius: 50px;
   }
 
   /* Handle */
   .small-scrollbar::-webkit-scrollbar-thumb {
-    background: #eff;
+    background: #123;
     border-radius: 50px;
   }
 

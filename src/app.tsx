@@ -5,9 +5,15 @@ import { HashRouter, Route, Routes, useLocation } from 'react-router-dom';
 
 import { Sidebar, Template } from './components/layout';
 
-import { ProfilePage, HomePage, LoginPage, FeedbackPage } from './pages';
+import {
+  ProfilePage,
+  HomePage,
+  LoginPage,
+  FeedbackPage,
+  DefinePage,
+} from './pages';
 import UserProvider, { useUser } from './lib/userContext';
-import type { UserData, Word } from './typings';
+import type { TodayWords, UserData, Word } from './typings';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
@@ -18,8 +24,9 @@ function App() {
 
   React.useEffect(() => {
     window.electron.ipcRenderer.sendMessage('get-today-words', []);
-    window.electron.ipcRenderer.on('today-words', ({ todayWords }) =>
-      setTodayWords(todayWords)
+    window.electron.ipcRenderer.on(
+      'today-words',
+      ({ todayWords }: TodayWords) => setTodayWords(todayWords)
     );
     window.electron.ipcRenderer.on('user-data', (user: UserData) => {
       setUser(user);
@@ -38,6 +45,7 @@ function App() {
         />
         <Route path="/me" element={<ProfilePage />} />
         <Route path="/feedback" element={<FeedbackPage />} />
+        <Route path="/define" element={<DefinePage />} />
       </Routes>
     </Template>
   );

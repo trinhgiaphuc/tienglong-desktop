@@ -4,17 +4,17 @@ import { computerIcon, logoIcon } from '../assets/icons';
 export default function FeedbackPage() {
   return (
     <div className="bg-gray-800 text-gray-100 px-8 py-12 h-screen w-screen flex items-center justify-center flex-col font-ole">
-      <div className="text-center w-full bg-gray-100 rounded-md">
+      <div className="text-center w-full bg-gray-200 rounded-md">
         <img className="p-4 mx-auto" src={logoIcon} alt="icon tienglong" />
       </div>
-      <div className="max-w-screen-xl mt-4 px-8 grid gap-8 grid-cols-1 md:grid-cols-2 md:px-12 lg:px-16 xl:px-32 py-16 mx-auto bg-gray-100 text-gray-900 rounded-lg shadow-lg">
+      <div className="max-w-screen-xl mt-4 px-8 grid gap-8 grid-cols-1 md:grid-cols-2 md:px-12 lg:px-16 xl:px-32 py-16 mx-auto bg-gray-200 text-gray-900 rounded-lg shadow-lg">
         <div className="flex flex-col justify-between">
           <div>
             <h2 className="text-4xl lg:text-5xl font-bold leading-tight">
               Trò chuyện cùng chúng tôi!
             </h2>
             <div className="text-gray-700 mt-8">
-              Bạn không thích form? Kết nối với chúng tôi qua{' '}
+              Bạn không thích form? Kết nối trực tiếp với chúng tôi qua{' '}
               <span className="underline">email</span> mọi lúc mọi nơi .
             </div>
           </div>
@@ -49,7 +49,7 @@ export default function FeedbackPage() {
             </span>
             <textarea
               placeholder="Xin mời nhập nội dung"
-              className="w-full h-32 bg-gray-300 text-gray-900 mt-2 p-3 rounded-lg focus:outline-none focus:shadow-outline"
+              className="w-full h-32 resize-none bg-gray-300 text-gray-900 mt-2 p-3 rounded-lg focus:outline-none focus:shadow-outline"
             ></textarea>
           </div>
           <div className="mt-8">

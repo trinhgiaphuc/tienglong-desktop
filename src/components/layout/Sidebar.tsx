@@ -1,6 +1,12 @@
 import * as React from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
-import { adminIcon, feedbackIcon, homeIcon, meIcon } from '../../assets/icons';
+import {
+  adminIcon,
+  feedbackIcon,
+  homeIcon,
+  ideaIcon,
+  meIcon,
+} from '../../assets/icons';
 import { handleSignOut } from '../../lib/firebase';
 
 type PageRoute = {
@@ -20,7 +26,16 @@ const routes: Array<PageRoute> = [
     name: 'Trang Cá Nhân',
     iconSrc: meIcon,
   },
-  { path: '/admin', name: 'Quản Trị', iconSrc: adminIcon },
+  {
+    path: '/define',
+    name: 'Định nghĩa',
+    iconSrc: ideaIcon,
+  },
+  {
+    path: '/admin',
+    name: 'Quản Trị',
+    iconSrc: adminIcon,
+  },
   {
     path: 'feedback',
     name: 'Phản Hồi',

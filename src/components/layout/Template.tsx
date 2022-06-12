@@ -6,7 +6,7 @@ type PropsType = {
 
 export default function Template({ children }: PropsType) {
   return (
-    <main className="bg-gray-100 dark:bg-gray-900 h-screen overflow-hidden relative">
+    <main className="bg-gray-100 font-ole dark:bg-gray-900 h-screen overflow-hidden relative">
       <div className="flex items-start justify-between">{children}</div>
     </main>
   );

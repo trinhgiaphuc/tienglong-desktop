@@ -1,7 +1,7 @@
 import 'dotenv/config';
 import { app, BrowserWindow, ipcMain, IpcMainEvent } from 'electron';
 import fetch from 'electron-fetch';
-import { RequestChannels, ResponseChannels } from './preload';
+import { RequestChannels, ResponseChannels } from './typings';
 
 if (require('electron-squirrel-startup')) {
   app.quit();
@@ -60,6 +60,7 @@ async function createWindow(): Promise<void> {
 
   ipcMain.on('get-today-words', handleSendTodayWords);
   ipcMain.on('set-auth', handleSetAuth);
+  ipcMain.on('create-word', handleCreateWord);
 }
 
 app.on('ready', createWindow);
@@ -76,13 +77,27 @@ app.on('activate', () => {
   }
 });
 
+ async function fetcher(
+  path: string,
+  data: unknown = undefined
+): Promise<unknown> {
+  const res = await fetch(`${BASE_URL}/${path}`, {
+     method: data ? 'POST' : 'GET',
+     headers: {
+       'Content-type': 'Application/json',
+       'cookie': `USER_ACCESS_TOKEN=${TOKEN}`
+     },
+     body: JSON.stringify(data)
+  });
+   return res.json();
+}
+
 async function handleSendTodayWords() {
   const res = await fetch(`${BASE_URL}/word/today-words`);
   const data = await res.json();
   mainWindow.webContents.send('words', data);
 }
 
-// TODO:
 async function handleSetAuth(
   e: IpcMainEvent,
   infoArray: [{ token: string; uid: string }]
@@ -97,10 +112,20 @@ async function handleSetAuth(
         'Content-Type': 'Application/json',
       },
     });
-    const userData  = await res.json();
+    const userData: unknown = await res.json();
     mainWindow.webContents.send('user-data', userData);
   } catch (error) {
     console.error(error);
     mainWindow.webContents.send('user-data', null);
   }
+}
+
+async function handleCreateWord(
+  e: IpcMainEvent,
+  theWord: [
+    { word: string; definition: string; example: string; tags: string[] }
+  ]
+) {
+  const res = await fetcher('word/create', theWord[0]);
+  console.log(res)
 }
