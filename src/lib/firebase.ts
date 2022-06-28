@@ -5,6 +5,7 @@ import {
   GoogleAuthProvider,
   signOut,
   signInWithEmailAndPassword,
+  browserSessionPersistence
 } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 import { getStorage } from 'firebase/storage';
@@ -27,12 +28,15 @@ export const auth = getAuth();
 export const db = getFirestore();
 export const storage = getStorage();
 
+auth.setPersistence(browserSessionPersistence);
+
 export const facebookProvider = new FacebookAuthProvider();
 export const googleProvider = new GoogleAuthProvider();
 
 export async function handleSignOut() {
   try {
     await signOut(auth);
+    window.electron.ipcRenderer.sendMessage('logout', [])
   } catch (error) {
     console.error(error);
   }

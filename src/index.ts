@@ -3,6 +3,8 @@ import { app, BrowserWindow, ipcMain, IpcMainEvent } from 'electron';
 import fetch from 'electron-fetch';
 import { RequestChannels, ResponseChannels } from './typings';
 
+import cookie from 'cookie';
+
 if (require('electron-squirrel-startup')) {
   app.quit();
 }
@@ -33,8 +35,8 @@ declare global {
 
 let mainWindow: BrowserWindow = null;
 
-const BASE_URL = 'https://tienglong.vercel.app/api';
-let TOKEN: string;
+const BASE_URL = /* 'https://tienglong.vercel.app/api' */ 'http://localhost:3001/api';
+let TOKEN = '';
 
 async function createWindow(): Promise<void> {
   mainWindow = new BrowserWindow({
@@ -46,21 +48,13 @@ async function createWindow(): Promise<void> {
     },
   });
 
-  mainWindow.webContents.setWindowOpenHandler(({ url }) => {
-    const { origin } = new URL(url);
-    if (origin === 'https://tienglong-34e90.firebaseapp.com') {
-      return { action: 'allow' };
-    } else {
-      return { action: 'deny' };
-    }
-  });
-
   mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
   mainWindow.webContents.openDevTools();
 
   ipcMain.on('get-today-words', handleSendTodayWords);
   ipcMain.on('set-auth', handleSetAuth);
   ipcMain.on('create-word', handleCreateWord);
+  ipcMain.on('logout', handleLogout)
 }
 
 app.on('ready', createWindow);
@@ -100,20 +94,24 @@ async function handleSendTodayWords() {
 
 async function handleSetAuth(
   e: IpcMainEvent,
-  infoArray: [{ token: string; uid: string }]
+  infoArray: [{ token: string; id: string }]
 ) {
-  const { token, uid } = infoArray[0];
-  TOKEN = token;
+  const { token, id } = infoArray[0];
 
   try {
-    const res = await fetch(`${BASE_URL}/user/${uid}`, {
-      method: 'GET',
+    const user = await fetcher(`user/${id}/claims`, { token });
+    mainWindow.webContents.send('user-data', user);
+
+    fetch(`${BASE_URL}/enter/`, {
+      method: 'POST',
       headers: {
         'Content-Type': 'Application/json',
       },
+      body: JSON.stringify({token}),
+    }).then(res => {
+      const c = cookie.parse(res.headers.get('set-cookie'));
+      TOKEN = c.USER_ACCESS_TOKEN || '';
     });
-    const userData: unknown = await res.json();
-    mainWindow.webContents.send('user-data', userData);
   } catch (error) {
     console.error(error);
     mainWindow.webContents.send('user-data', null);
@@ -128,4 +126,8 @@ async function handleCreateWord(
 ) {
   const res = await fetcher('word/create', theWord[0]);
   console.log(res);
+}
+
+async function handleLogout() {
+  TOKEN = '';
 }

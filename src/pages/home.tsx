@@ -13,7 +13,7 @@ export default function HomePage({ todayWords }: PropsTypes) {
   let username: string, userImg: string;
 
   if (user) {
-    ({ username, image: userImg } = user.userDetails);
+    ({ username, image: userImg } = user);
   }
 
   return (

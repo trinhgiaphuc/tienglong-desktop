@@ -37,14 +37,12 @@ export type UserDetails = {
   words: number;
 };
 
-export type UserData = {
-  userDetails: UserDetails;
-  userWords: Word[];
-};
-
 export type RequestChannels =
   | 'get-today-words'
+  | 'get-userDetails'
   | 'login'
+  | 'logout'
   | 'set-auth'
   | 'create-word';
+
 export type ResponseChannels = 'today-words' | 'login-status' | 'user-data';

@@ -1,28 +1,12 @@
 import * as React from 'react';
-import { NavigateFunction, useNavigate } from 'react-router-dom';
-import Modal from '../components/commons/Modal';
+import {
+  FormSubmittedModal,
+  CreateWordTextAreaSection,
+  CreateWordInputSection,
+  CreateWordYearSelector,
+  CreateWordSuggestTag,
+} from '../components/form/addWord';
 import { useUser } from '../lib/userContext';
-
-type SuggestTag = {
-  id: string;
-  title: string;
-};
-
-const suggestTag: {
-  trend: SuggestTag[];
-  source: SuggestTag[];
-} = {
-  trend: [
-    { id: 'khongloithoi', title: 'Không lỗi thời' },
-    { id: 'dangthinhhanh', title: 'Đang thịnh hành' },
-    { id: 'khongphobien', title: 'Không còn phổ biến' },
-  ],
-  source: [
-    { id: 'mienbac', title: 'Nguồn gốc từ phía Bắc' },
-    { id: 'mientrung', title: 'Nguồn gốc từ miền Trung' },
-    { id: 'miennam', title: 'Nguồn gốc từ phía Nam' },
-  ],
-};
 
 type WordState = {
   wordForm: {
@@ -36,7 +20,7 @@ type WordState = {
   error: { wordError: string; definitionError: string; exampleError: string };
 };
 
-type WordAction = {
+export type WordAction = {
   type: 'UPDATE_WORD' | 'ERROR' | 'RESET_ERROR' | 'RESET_ALL';
   payload?: {
     wordForm?: {
@@ -91,7 +75,6 @@ const wordReducer: React.Reducer<WordState, WordAction> = (
 export default function DefinePage() {
   const { user } = useUser();
   const [hideModal, setHideModal] = React.useState<boolean>(true);
-  const navigate = useNavigate();
 
   const [
     {
@@ -109,9 +92,6 @@ export default function DefinePage() {
     suggestedTag: { source, trend },
     createdYear,
   } = wordForm;
-
-  const thisYear = new Date().getFullYear();
-  const years = new Array(thisYear - 1999).fill('*').map((_, i) => i + 2000);
 
   function transformStringTagToArray(): string[] {
     let tagValue = otherTags;
@@ -170,12 +150,48 @@ export default function DefinePage() {
     return () => dispatch({ type: 'RESET_ERROR', payload });
   }
 
-  function updateWord(type: 'word' | 'definition' | 'example' | 'otherTags') {
-    return (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
-      dispatch({
-        type: 'UPDATE_WORD',
-        payload: { wordForm: { ...wordForm, [type]: e.target.value } },
-      });
+  function updateWord(
+    type:
+      | 'word'
+      | 'definition'
+      | 'example'
+      | 'otherTags'
+      | 'createdYear'
+      | 'trend'
+      | 'source'
+  ) {
+    return (
+      e: React.ChangeEvent<
+        HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+      >
+    ) => {
+      if (type === 'trend') {
+        dispatch({
+          type: 'UPDATE_WORD',
+          payload: {
+            wordForm: {
+              ...wordForm,
+              suggestedTag: { trend, source: e.target.value },
+            },
+          },
+        });
+      } else if (type === 'source') {
+        dispatch({
+          type: 'UPDATE_WORD',
+          payload: {
+            wordForm: {
+              ...wordForm,
+              suggestedTag: { source, trend: e.target.value },
+            },
+          },
+        });
+      } else {
+        dispatch({
+          type: 'UPDATE_WORD',
+          payload: { wordForm: { ...wordForm, [type]: e.target.value } },
+        });
+      }
+    };
   }
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -183,142 +199,69 @@ export default function DefinePage() {
     const tags = transformStringTagToArray();
     if (formIsValid()) {
       window.electron.ipcRenderer.sendMessage('create-word', [
-        {
+        console.log({
           word,
           definition,
           example,
           tags,
-          author: user.userDetails.username,
-        },
+          author: user.username,
+        }),
       ]);
+      // setHideModal(false);
     }
-    setHideModal(false);
   }
 
   return (
     <div className="container mx-auto h-screen">
       {hideModal ? null : (
-        <FormSubmittedModal
-          dispatch={dispatch}
-          navigate={navigate}
-          setHideModal={setHideModal}
-        />
+        <FormSubmittedModal dispatch={dispatch} setHideModal={setHideModal} />
       )}
       <div className="max-w-2xl p-5 mx-auto mt-16 small-scrollbar bg-gray-100 rounded-md shadow-sm h-[90%] overflow-y-scroll">
         <h1 className="my-3 text-3xl font-semibold text-gray-700 text-center">
           Định nghĩa
         </h1>
         <form onSubmit={handleSubmit}>
-          <div className="mb-6">
-            <label htmlFor="word" className="block mb-2 text-base text-black">
-              Từ ngữ *
-            </label>
-            <input
-              type="text"
-              id="word"
-              value={word}
-              onChange={updateWord('word')}
-              placeholder="xin mời nhập từ ngữ ở ô này"
-              required
-              maxLength={100}
-              className="w-full px-3 bg-gray-200 py-2 placeholder-gray-400 rounded-md  focus:outline-none focus:ring focus:ring-blue-100 focus:shadow focus:border-indigo-300"
-            />
+          <CreateWordInputSection
+            label="Từ ngữ *"
+            id="word"
+            required
+            maxLength={200}
+            onChange={updateWord('word')}
+            placeholder="xin mời nhập từ ngữ ở ô này"
+            value={word}
+            error={wordError}
+            onFocus={resetError('wordError')}
+          />
 
-            {wordError ? (
-              <div className="my-4">
-                <DisplayError error={wordError} />
-              </div>
-            ) : null}
-          </div>
+          <CreateWordTextAreaSection
+            label="Định Nghĩa Từ *"
+            textValue={definition}
+            onFocus={resetError('definitionError')}
+            onChange={updateWord('definition')}
+            error={definitionError}
+            id="definition"
+          />
 
-          <div className="mb-6">
-            <label
-              htmlFor="definition"
-              className="block mb-2 text-base text-black"
-            >
-              Định Nghĩa Từ *
-            </label>
-            <textarea
-              rows={5}
-              maxLength={3000}
-              value={definition}
-              onFocus={resetError('definitionError')}
-              onChange={updateWord('definition')}
-              id="definition"
-              placeholder="xin mời nhập định nghĩa ở ô này"
-              required
-              className="w-full px-3 bg-gray-200 py-2 resize-none placeholder-gray-400 rounded-md  focus:outline-none focus:ring focus:ring-blue-100 focus:shadow focus:border-indigo-300"
-            />
+          <CreateWordTextAreaSection
+            label="Ví Dụ *"
+            textValue={example}
+            onFocus={resetError('exampleError')}
+            onChange={updateWord('example')}
+            error={exampleError}
+            id="example"
+          />
 
-            {definitionError ? (
-              <div className="my-4">
-                <DisplayError error={definitionError} />
-              </div>
-            ) : null}
-          </div>
+          <CreateWordInputSection
+            label="Thẻ từ *"
+            id="tag"
+            maxLength={500}
+            onChange={updateWord('otherTags')}
+            placeholder="#conga#convit"
+            value={otherTags}
+            pattern="^[a-zA-Z0-9#]*$"
+          />
 
-          <div className="mb-6">
-            <label htmlFor="example" className="text-base text-black">
-              Ví dụ *
-            </label>
-            <textarea
-              id="example"
-              rows={5}
-              value={example}
-              onFocus={resetError('exampleError')}
-              onChange={updateWord('example')}
-              maxLength={3000}
-              placeholder="xin mời nhập ví dụ ở ô này"
-              required
-              className="w-full px-3 bg-gray-200 py-2  resize-none placeholder-gray-400 rounded-md  focus:outline-none focus:ring focus:ring-blue-100 focus:shadow focus:border-indigo-300"
-            />
-
-            {exampleError ? (
-              <div className="my-4">
-                <DisplayError error={exampleError} />
-              </div>
-            ) : null}
-          </div>
-
-          <div className="mb-6">
-            <label htmlFor="tag" className="block mb-2 text-base text-black">
-              Thẻ từ *
-            </label>
-            <input
-              pattern="^[a-zA-Z0-9#]*$"
-              type="text"
-              id="tag"
-              value={otherTags}
-              onChange={updateWord('otherTags')}
-              maxLength={500}
-              placeholder="#conga#convit"
-              className="w-full px-3 bg-gray-200 py-2 placeholder-gray-400 rounded-md  focus:outline-none focus:ring focus:ring-blue-100 focus:shadow focus:border-indigo-300"
-            />
-          </div>
-
-          <div className="mb-2 inline-block relative">
-            <select
-              className="bg-gray-300 text-gray-700 focus:outline focus:outline-blue-100 font-semibold py-2 px-4 rounded items-center no-scrollbar"
-              onChange={({ target: { value: createdYear } }) =>
-                dispatch({
-                  type: 'UPDATE_WORD',
-                  payload: {
-                    wordForm: { ...wordForm, createdYear },
-                  },
-                })
-              }
-            >
-              <option value={thisYear} defaultChecked>
-                Năm
-              </option>
-              <option value="DiSản">Di Sản</option>
-              {years.map((year) => (
-                <option key={year} value={year}>
-                  {year}
-                </option>
-              ))}
-            </select>
-          </div>
+          <CreateWordYearSelector onChange={updateWord('createdYear')} />
 
           <div className="my-4 h-[1px] bg-gray-200" />
 
@@ -332,123 +275,21 @@ export default function DefinePage() {
                 Giúp cho việc tìm kiếm từ trở nên dễ dàng hơn.
               </p>
               <fieldset className="mt-4">
-                <div className="space-y-4">
-                  <div className="flex items-center">
-                    <input
-                      id="no-source"
-                      name="source"
-                      type="radio"
-                      value=""
-                      onChange={() =>
-                        dispatch({
-                          type: 'UPDATE_WORD',
-                          payload: {
-                            wordForm: {
-                              ...wordForm,
-                              suggestedTag: { trend, source: '' },
-                            },
-                          },
-                        })
-                      }
-                      defaultChecked={true}
-                      className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300"
-                    />
-                    <label
-                      htmlFor="no-source"
-                      className="ml-3 block text-sm font-medium text-gray-700"
-                    >
-                      Không
-                    </label>
-                  </div>
-                  {suggestTag.source.map(({ id, title }) => (
-                    <div key={id} className="flex items-center">
-                      <input
-                        id={id}
-                        name="source"
-                        type="radio"
-                        value={id}
-                        onChange={(e) =>
-                          dispatch({
-                            type: 'UPDATE_WORD',
-                            payload: {
-                              wordForm: {
-                                ...wordForm,
-                                suggestedTag: { trend, source: e.target.value },
-                              },
-                            },
-                          })
-                        }
-                        className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300"
-                      />
-                      <label
-                        htmlFor={id}
-                        className="ml-3 block text-sm font-medium text-gray-700"
-                      >
-                        {title}
-                      </label>
-                    </div>
-                  ))}
-                </div>
+                <CreateWordSuggestTag
+                  onChange={updateWord('source')}
+                  tagName="source"
+                  defaultId="no-source"
+                  name="source"
+                />
 
                 <div className="my-4 h-[1px] bg-gray-200" />
 
-                <div className="space-y-4">
-                  <div className="flex items-center">
-                    <input
-                      id="no-trend"
-                      value=""
-                      onChange={() =>
-                        dispatch({
-                          type: 'UPDATE_WORD',
-                          payload: {
-                            wordForm: {
-                              ...wordForm,
-                              suggestedTag: { source, trend: '' },
-                            },
-                          },
-                        })
-                      }
-                      name="trend"
-                      type="radio"
-                      defaultChecked={true}
-                      className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300"
-                    />
-                    <label
-                      htmlFor="no-trend"
-                      className="ml-3 block text-sm font-medium text-gray-700"
-                    >
-                      Không
-                    </label>
-                  </div>
-                  {suggestTag.trend.map(({ id, title }) => (
-                    <div key={id} className="flex items-center">
-                      <input
-                        id={id}
-                        value={id}
-                        onChange={(e) =>
-                          dispatch({
-                            type: 'UPDATE_WORD',
-                            payload: {
-                              wordForm: {
-                                ...wordForm,
-                                suggestedTag: { source, trend: e.target.value },
-                              },
-                            },
-                          })
-                        }
-                        name="trend"
-                        type="radio"
-                        className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300"
-                      />
-                      <label
-                        htmlFor={id}
-                        className="ml-3 block text-sm font-medium text-gray-700"
-                      >
-                        {title}
-                      </label>
-                    </div>
-                  ))}
-                </div>
+                <CreateWordSuggestTag
+                  onChange={updateWord('trend')}
+                  tagName="trend"
+                  defaultId="no-trend"
+                  name="trend"
+                />
               </fieldset>
             </div>
           </div>
@@ -466,52 +307,5 @@ export default function DefinePage() {
         </form>
       </div>
     </div>
-  );
-}
-
-function DisplayError({ error }: { error: string }) {
-  return (
-    <h1 className="rounded-md text-center border border-black bg-red-500 text-base bg-opacity-80 p-2">
-      {error}
-    </h1>
-  );
-}
-
-function FormSubmittedModal({
-  setHideModal,
-  dispatch,
-  navigate,
-}: {
-  setHideModal: React.Dispatch<React.SetStateAction<boolean>>;
-  dispatch: React.Dispatch<WordAction>;
-  navigate: NavigateFunction;
-}) {
-  return (
-    <Modal noClose={true} setHideModal={setHideModal}>
-      <div className="flex flex-col gap-4">
-        <h1 className="text-2xl text-center font-bold">Tạo Từ Thành Công</h1>
-        <p className="text-lg font-bold">
-          Từ của bạn đã được tạo và đang trong quá trình kiểm duyệt, mong bạn
-          chờ trong giây lát nhé.
-        </p>
-        <div className="flex items-center justify-evenly">
-          <button
-            className="p-2 border border-black rounded-lg font-bold"
-            onClick={() => {
-              dispatch({ type: 'RESET_ALL' });
-              setHideModal(true);
-            }}
-          >
-            Tạo từ mới
-          </button>
-          <button
-            className="p-2 border border-black rounded-lg font-bold"
-            onClick={() => navigate('/main_window', { replace: true })}
-          >
-            Trở về trang chủ
-          </button>
-        </div>
-      </div>
-    </Modal>
   );
 }

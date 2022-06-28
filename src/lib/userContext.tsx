@@ -1,10 +1,10 @@
 import * as React from 'react';
-import { StatusType, UserData } from '../typings';
+import { StatusType, UserDetails } from '../typings';
 import { useLogin } from './hooks';
 
 type UserContextType = {
-  user: UserData | null;
-  setUser: React.Dispatch<React.SetStateAction<UserData>>;
+  user: UserDetails | null;
+  setUser: React.Dispatch<React.SetStateAction<UserDetails>>;
   status: StatusType;
   setStatus: React.Dispatch<React.SetStateAction<StatusType>>;
 };
