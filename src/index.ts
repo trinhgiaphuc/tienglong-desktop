@@ -1,7 +1,7 @@
 import 'dotenv/config';
 import { app, BrowserWindow, ipcMain, IpcMainEvent } from 'electron';
 import fetch from 'electron-fetch';
-import { RequestChannels, ResponseChannels } from './typings';
+import { RequestChannels, ResponseChannels, UserDetails } from './typings';
 
 import cookie from 'cookie';
 
@@ -37,6 +37,7 @@ let mainWindow: BrowserWindow = null;
 
 const BASE_URL = /* 'https://tienglong.vercel.app/api' */ 'http://localhost:3001/api';
 let TOKEN = '';
+let userDetails: UserDetails | null = null;
 
 async function createWindow(): Promise<void> {
   mainWindow = new BrowserWindow({
@@ -71,10 +72,10 @@ app.on('activate', () => {
   }
 });
 
-async function fetcher(
+async function fetcher<T>(
   path: string,
   data: unknown = undefined
-): Promise<unknown> {
+): Promise<T> {
   const res = await fetch(`${BASE_URL}/${path}`, {
     method: data ? 'POST' : 'GET',
     headers: {
@@ -99,8 +100,12 @@ async function handleSetAuth(
   const { token, id } = infoArray[0];
 
   try {
-    const user = await fetcher(`user/${id}/claims`, { token });
-    mainWindow.webContents.send('user-data', user);
+    if (userDetails) {
+      mainWindow.webContents.send('user-data', userDetails);
+    } else {
+      userDetails = await fetcher<UserDetails>(`user/${id}/claims`, { token });
+      mainWindow.webContents.send('user-data', userDetails);
+    }
 
     fetch(`${BASE_URL}/enter/`, {
       method: 'POST',
@@ -130,4 +135,5 @@ async function handleCreateWord(
 
 async function handleLogout() {
   TOKEN = '';
+  userDetails = null;
 }

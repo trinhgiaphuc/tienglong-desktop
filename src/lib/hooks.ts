@@ -13,14 +13,13 @@ export function useLogin() {
   React.useEffect(() => {
     const unsubscribe = onAuthStateChanged(
       auth,
-      async (user) => {
-        if (user) {
-          const token = await user.getIdToken();
-          window.electron.ipcRenderer.sendMessage('set-auth', [
-            { token, id: user.uid },
-          ]);
-          navigate('/main_window');
+      async (userAuth) => {
+        if (userAuth) {
           setStatus('loading');
+          const token = await userAuth.getIdToken();
+          window.electron.ipcRenderer.sendMessage('set-auth', [
+            { token, id: userAuth.uid },
+          ]);
           window.electron.ipcRenderer.sendMessage('get-userDetails', []);
         } else {
           setStatus('unauthenticated');

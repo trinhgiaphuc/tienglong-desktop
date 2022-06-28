@@ -1,7 +1,13 @@
 import './index.css';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom/client';
-import { HashRouter, Route, Routes, useLocation } from 'react-router-dom';
+import {
+  HashRouter,
+  Route,
+  Routes,
+  useLocation,
+  useNavigate,
+} from 'react-router-dom';
 
 import { Sidebar, Template } from './components/layout';
 
@@ -21,7 +27,8 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 function App() {
   const { pathname } = useLocation();
   const [todayWords, setTodayWords] = React.useState<Word[]>([]);
-  const { setUser } = useUser();
+  const { setUser, setStatus } = useUser();
+  const navigate = useNavigate();
 
   React.useEffect(() => {
     window.electron.ipcRenderer.sendMessage('get-today-words', []);
@@ -32,7 +39,11 @@ function App() {
     window.electron.ipcRenderer.on(
       'user-data',
       ({ user }: { user: UserDetails }) => {
-        setUser(user);
+        if (user) {
+          setUser(user);
+          setStatus('authenticated');
+          navigate('/main_window');
+        }
       }
     );
   }, []);
