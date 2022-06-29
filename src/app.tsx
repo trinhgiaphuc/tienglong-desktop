@@ -1,29 +1,28 @@
-import './index.css';
-import * as React from 'react';
-import * as ReactDOM from 'react-dom/client';
+import "./index.css";
+import * as React from "react";
+import * as ReactDOM from "react-dom/client";
 import {
   HashRouter,
   Route,
   Routes,
   useLocation,
   useNavigate,
-} from 'react-router-dom';
+} from "react-router-dom";
 
-import { Sidebar, Template } from './components/layout';
+import { Sidebar, Template } from "./components/layout";
 
 import {
-  ProfilePage,
+  AdminPage,
+  DefinePage,
+  FeedbackPage,
   HomePage,
   LoginPage,
-  FeedbackPage,
-  DefinePage,
-  AdminPage,
-} from './pages';
-import UserProvider, { useUser } from './lib/userContext';
-import type { TodayWords, UserDetails, Word } from './typings';
+  ProfilePage,
+} from "./pages";
+import UserProvider, { useUser } from "./lib/userContext";
+import type { TodayWords, UserDetails, Word } from "./typings";
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-
+const root = ReactDOM.createRoot(document.getElementById("root"));
 function App() {
   const { pathname } = useLocation();
   const [todayWords, setTodayWords] = React.useState<Word[]>([]);
@@ -31,26 +30,28 @@ function App() {
   const navigate = useNavigate();
 
   React.useEffect(() => {
-    window.electron.ipcRenderer.sendMessage('get-today-words', []);
+    window.electron.ipcRenderer.sendMessage("get-today-words", []);
     window.electron.ipcRenderer.on(
-      'today-words',
-      ({ todayWords }: TodayWords) => setTodayWords(todayWords)
+      "today-words",
+      ({ todayWords }: TodayWords) => {
+        setTodayWords(todayWords);
+      },
     );
     window.electron.ipcRenderer.on(
-      'user-data',
+      "user-data",
       ({ user }: { user: UserDetails }) => {
         if (user) {
           setUser(user);
-          setStatus('authenticated');
-          navigate('/main_window');
+          setStatus("authenticated");
+          navigate("/main_window");
         }
-      }
+      },
     );
   }, []);
 
   return (
     <Template>
-      {pathname === '/' ? null : <Sidebar />}
+      {pathname === "/" ? null : <Sidebar />}
       <Routes>
         <Route path="/" element={<LoginPage />} />
         <Route
@@ -71,5 +72,5 @@ root.render(
     <UserProvider>
       <App />
     </UserProvider>
-  </HashRouter>
+  </HashRouter>,
 );

@@ -28,21 +28,34 @@ export type UserDetails = {
   createdAt: { _seconds: number; _nanoseconds: number };
   email: string;
   hashedPass: string;
-  hearts: number;
   id: string;
   image: string;
   role: string[];
   updatedAt: { _seconds: number; _nanoseconds: number };
   username: string;
-  words: number;
+  words?: number,
+  hearts?: number
 };
 
 export type RequestChannels =
   | 'get-today-words'
   | 'get-userDetails'
+  | 'get-user-words'
+  | 'get-words-and-hearts-count'
   | 'login'
   | 'logout'
   | 'set-auth'
-  | 'create-word';
+  | 'create-word'
+  | 'add-heart'
+  | 'remove-heart'
+  | 'login-admin'
+  | 'approve-word'
+  | 'delete-word'
+  | 'send-chat-admin'
 
-export type ResponseChannels = 'today-words' | 'login-status' | 'user-data';
+export type ResponseChannels = 'today-words' | 'login-status' | 'user-data' | 'user-words' | 'clear-caches' | 'words-and-hearts';
+
+export type WordsAndHearts = {
+  words: number;
+  hearts: number;
+}  

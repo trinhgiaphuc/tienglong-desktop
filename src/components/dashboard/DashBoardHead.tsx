@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useNavigate } from 'react-router-dom';
 import Loading from '../commons/Loading';
 
 export default function DashBoardHead({
@@ -8,6 +9,8 @@ export default function DashBoardHead({
   username: string;
   userImg: string;
 }) {
+  const navigate = useNavigate();
+
   return (
     <header className="w-full h-16 z-40 flex items-center justify-between">
       <ToggleSidebarButton />
@@ -44,13 +47,17 @@ export default function DashBoardHead({
             </div>
           ) : (
             <React.Fragment>
-              <a href="#" className="block relative">
+              <button
+                onClick={() => navigate('/me')}
+                className="block relative"
+              >
                 <img
+                  referrerPolicy="no-referrer"
                   alt="profil"
                   src={userImg}
                   className="mx-auto object-cover rounded-full h-10 w-10 "
                 />
-              </a>
+              </button>
               <button className="flex items-center text-gray-500 dark:text-white text-md">
                 {username}
                 <svg

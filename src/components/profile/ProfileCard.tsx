@@ -1,20 +1,21 @@
-import * as React from 'react';
+import * as React from "react";
 
-import { medalIcon, newMemberIcon } from '../../assets/icons';
-import type { UserDetails } from '../../typings';
+import { medalIcon, newMemberIcon } from "../../assets/icons";
+import type { UserDetails } from "../../typings";
 
 export default function ProfileCard({
   userDetails,
 }: {
   userDetails: UserDetails;
 }) {
-  const { image, username, words, hearts } = userDetails;
+  const { image, username, hearts = -2, words = -2 } = userDetails;
 
   return (
     <aside className="font-ole">
       <div className="bg-gray-100 dark:bg-gray-700 shadow rounded-lg p-10">
         <div className="flex flex-col gap-1 text-center items-center">
           <img
+            referrerPolicy="no-referrer"
             className="h-32 w-32 bg-gray-100 dark:bg-red-800 p-2 rounded-full shadow mb-4"
             src={image}
             alt="user avatar"
@@ -50,8 +51,11 @@ export default function ProfileCard({
       </div>
 
       <div className="mt-5 space-x-4 flex justify-center items-center w-full">
-        <HotWord bgColor="bg-gradient-to-t from-red-400 to-yellow-300" />
-        <HotWord bgColor="bg-gradient-to-t from-blue-500 to-yellow-400" />
+        <AddHotWord />
+        <AddHotWord />
+
+        {/* <HotWord bgColor="bg-gradient-to-t from-red-400 to-yellow-300" /> */}
+        {/* <HotWord bgColor="bg-gradient-to-t from-blue-500 to-yellow-400" /> */}
       </div>
     </aside>
   );
@@ -80,7 +84,8 @@ function HotWord({ bgColor }: { bgColor: string }) {
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"
-                ></path>
+                >
+                </path>
               </svg>
               <p className="font-semibold ml-1 text-black">1800</p>
             </div>
@@ -108,6 +113,31 @@ function HotWord({ bgColor }: { bgColor: string }) {
           magni aperiam eveniet, nam rem sunt, et natus odit, veritatis aliquid
           atque assumenda suscipit quod earum soluta culpa qui! Facilis.
         </p>
+      </div>
+    </div>
+  );
+}
+
+function AddHotWord() {
+  return (
+    <div className="flex flex-col justify-center items-center bg-white bg-opacity-20 rounded-3xl bg-cover text-gray-800 cursor-pointer w-full h-64 my-2 ">
+      <div className="w-1/2 aspect-square">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          xmlSpace="preserve"
+          viewBox="0 0 50 50"
+        >
+          <circle cx="25" cy="25" r="25" fill="#43b05c" />
+          <path
+            fill="none"
+            stroke="#fff"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeMiterlimit="10"
+            strokeWidth="2"
+            d="M25 13v25m13-13H13"
+          />
+        </svg>
       </div>
     </div>
   );

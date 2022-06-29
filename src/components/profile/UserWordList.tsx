@@ -21,6 +21,7 @@ export default function UserWordList({
           <WordCard key={word.id} image={image} {...word} />
         ))}
       </div>
+
     </article>
   );
 }
@@ -56,6 +57,7 @@ function WordCard(wordDetails: WordCard) {
       <div className="flex flex-row px-2 py-3 mx-3">
         <div className="w-auto h-auto rounded-full">
           <img
+            referrerPolicy="no-referrer"
             className="w-12 h-12 object-cover rounded-full shadow cursor-pointer"
             alt="User avatar"
             src={image}
