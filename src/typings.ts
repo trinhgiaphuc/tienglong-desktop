@@ -20,6 +20,10 @@ export type TodayWords = {
   todayWords: Word[];
 };
 
+export type TrendingWords = {
+  trendingWords: Word[];
+};
+
 export type LoginData = [{ email: string; password: string }];
 
 export type StatusType = 'loading' | 'authenticated' | 'unauthenticated';
@@ -39,6 +43,7 @@ export type UserDetails = {
 
 export type RequestChannels =
   | 'get-today-words'
+  | 'get-trending-words'
   | 'get-userDetails'
   | 'get-user-words'
   | 'get-words-and-hearts-count'
@@ -53,7 +58,7 @@ export type RequestChannels =
   | 'delete-word'
   | 'send-chat-admin'
 
-export type ResponseChannels = 'today-words' | 'login-status' | 'user-data' | 'user-words' | 'clear-caches' | 'words-and-hearts';
+export type ResponseChannels = 'today-words' | 'trending-words' | 'login-status' | 'user-data' | 'user-words' | 'clear-caches' | 'words-and-hearts';
 
 export type WordsAndHearts = {
   words: number;

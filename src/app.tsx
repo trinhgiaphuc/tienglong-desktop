@@ -20,23 +20,34 @@ import {
   ProfilePage,
 } from "./pages";
 import UserProvider, { useUser } from "./lib/userContext";
-import type { TodayWords, UserDetails, Word } from "./typings";
+import type { TodayWords, UserDetails, Word, TrendingWords } from "./typings";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 function App() {
   const { pathname } = useLocation();
   const [todayWords, setTodayWords] = React.useState<Word[]>([]);
+  const [trendingWords, setTrendingWords] = React.useState<Word[]>([]);
+
   const { setUser, setStatus } = useUser();
   const navigate = useNavigate();
 
   React.useEffect(() => {
     window.electron.ipcRenderer.sendMessage("get-today-words", []);
+    window.electron.ipcRenderer.sendMessage("get-trending-words", []);
+
     window.electron.ipcRenderer.on(
       "today-words",
       ({ todayWords }: TodayWords) => {
         setTodayWords(todayWords);
       },
     );
+    window.electron.ipcRenderer.on(
+      "trending-words",
+      ({ trendingWords }: TrendingWords) => {
+        setTrendingWords(trendingWords);
+      },
+    );
+
     window.electron.ipcRenderer.on(
       "user-data",
       ({ user }: { user: UserDetails }) => {
@@ -56,7 +67,7 @@ function App() {
         <Route path="/" element={<LoginPage />} />
         <Route
           path="/main_window"
-          element={<HomePage todayWords={todayWords} />}
+          element={<HomePage todayWords={todayWords} trendingWords={trendingWords} />}
         />
         <Route path="/me" element={<ProfilePage />} />
         <Route path="/feedback" element={<FeedbackPage />} />

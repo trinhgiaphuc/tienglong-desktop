@@ -2,6 +2,7 @@ import * as React from "react";
 
 import { medalIcon, newMemberIcon } from "../../assets/icons";
 import type { UserDetails } from "../../typings";
+import AddHotWord from "../buttons/AddHotWord";
 
 export default function ProfileCard({
   userDetails,
@@ -97,48 +98,14 @@ function HotWord({ bgColor }: { bgColor: string }) {
         className={`absolute top-0 left-0 px-2 py-5 small-scrollbar h-full overflow-y-scroll w-full z-10 ${bgColor} hover:opacity-100 opacity-0 duration-300 `}
       >
         <p className="text-center text-lg">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloremque
-          sed eius ea saepe alias, molestiae vero? Atque modi ducimus nulla quam
-          itaque consequatur vitae, in ad ea aliquam, voluptas eveniet. Lorem
-          ipsum, dolor sit amet consectetur adipisicing elit. Velit obcaecati
-          magni aperiam eveniet, nam rem sunt, et natus odit, veritatis aliquid
-          atque assumenda suscipit quod earum soluta culpa qui! Facilis.
+          Definition
         </p>
         <div className="border-b border-gray-600 my-5"></div>
         <p className="text-center text-lg">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloremque
-          sed eius ea saepe alias, molestiae vero? Atque modi ducimus nulla quam
-          itaque consequatur vitae, in ad ea aliquam, voluptas eveniet. Lorem
-          ipsum, dolor sit amet consectetur adipisicing elit. Velit obcaecati
-          magni aperiam eveniet, nam rem sunt, et natus odit, veritatis aliquid
-          atque assumenda suscipit quod earum soluta culpa qui! Facilis.
+          example
         </p>
       </div>
     </div>
   );
 }
 
-function AddHotWord() {
-  return (
-    <div className="flex flex-col justify-center items-center bg-white bg-opacity-20 rounded-3xl bg-cover text-gray-800 cursor-pointer w-full h-64 my-2 ">
-      <div className="w-1/2 aspect-square">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          xmlSpace="preserve"
-          viewBox="0 0 50 50"
-        >
-          <circle cx="25" cy="25" r="25" fill="#43b05c" />
-          <path
-            fill="none"
-            stroke="#fff"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeMiterlimit="10"
-            strokeWidth="2"
-            d="M25 13v25m13-13H13"
-          />
-        </svg>
-      </div>
-    </div>
-  );
-}

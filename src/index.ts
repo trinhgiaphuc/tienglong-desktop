@@ -59,6 +59,7 @@ async function createWindow(): Promise<void> {
   mainWindow.webContents.openDevTools();
 
   ipcMain.on("get-today-words", handleSendTodayWords);
+  ipcMain.on("get-trending-words", handleSendTrendingWords);
   ipcMain.on("get-user-words", handleSendUserWords);
   ipcMain.on("set-auth", handleSetAuth);
   ipcMain.on("create-word", handleCreateWord);
@@ -99,6 +100,15 @@ async function handleSendTodayWords() {
   const res = await fetch(`${BASE_URL}/word/today-words`);
   const todayWords = await res.json();
   mainWindow.webContents.send("today-words", todayWords);
+}
+
+async function handleSendTrendingWords() {
+  const res = await fetch(`${BASE_URL}/word/trending-words`);
+  const trendingWords = await res.json();
+  console.log(trendingWords);
+  
+  
+  mainWindow.webContents.send('trending-words', trendingWords);
 }
 
 async function handleSetAuth(

@@ -1,8 +1,7 @@
 import * as React from "react";
 import { useUser } from "../lib/userContext";
 import { ProfileCard, UserWordList } from "../components/profile";
-import { Word } from "../typings";
-import { WordsAndHearts } from "../lib/db";
+import { Word, WordsAndHearts } from "../typings";
 
 export default function ProfilePage() {
   const { user } = useUser();
