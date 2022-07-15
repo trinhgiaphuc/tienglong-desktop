@@ -8,8 +8,8 @@ import {
   signOut,
 } from "firebase/auth";
 
-import { getFirestore } from "firebase/firestore";
-import { getStorage } from "firebase/storage";
+import { doc, getDoc, getFirestore } from "firebase/firestore";
+import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAx-XZyVnFvhKglziQJZDtcxTDSllLAchU",
@@ -54,4 +54,45 @@ export async function handleSignOut() {
   } catch (error) {
     console.error(error);
   }
+}
+
+export async function uploadImage(file: Blob | Uint8Array | ArrayBuffer, number?: string) {
+  let path: string;
+  if (typeof number !== 'undefined') {
+    path = `/${auth.currentUser.uid}/highlights/${number}`;
+  } else {
+    path = `/${auth.currentUser.uid}/avatar`;
+  }
+  try {
+    const storageRef = ref(storage, path);
+    await uploadBytes(storageRef, file)
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+export async function fetchImage(uid: string, number?: 1 | 2) {
+  let path: string;
+  if (typeof number !== 'undefined') {
+    path = `/${auth.currentUser.uid}/highlights/${number}`;
+  } else {
+    path = `/${auth.currentUser.uid}/avatar`;
+  }
+
+  try {
+
+    const imgRef = ref(storage, path);
+    const imageUrl = await getDownloadURL(imgRef);
+
+    return imageUrl;
+
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+export async function checkWordIsLiked(wordId: string, likerId: string) {
+  const likeRef = doc(db, 'hearts', `${wordId}-${likerId}`)
+  const result = await getDoc(likeRef);
+  return result.exists();
 }

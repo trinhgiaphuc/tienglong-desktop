@@ -65,6 +65,9 @@ async function createWindow(): Promise<void> {
   ipcMain.on("create-word", handleCreateWord);
   ipcMain.on("logout", handleLogout);
   ipcMain.on("get-words-and-hearts-count", handleSendWordsAndHeartsCount);
+  ipcMain.on("fetch-word", handleSendSpecificWord);
+  ipcMain.on("add-heart", handleAddHeart);
+  ipcMain.on("remove-heart", handleRemoveHeart);
 }
 
 app.on("ready", createWindow);
@@ -105,9 +108,7 @@ async function handleSendTodayWords() {
 async function handleSendTrendingWords() {
   const res = await fetch(`${BASE_URL}/word/trending-words`);
   const trendingWords = await res.json();
-  console.log(trendingWords);
-  
-  
+
   mainWindow.webContents.send('trending-words', trendingWords);
 }
 
@@ -185,3 +186,30 @@ async function handleSendWordsAndHeartsCount(
     await fetcher(`user/${uid}/words-and-hearts`);
   mainWindow.webContents.send("words-and-hearts", wordsAndHeartsCount);
 }
+
+async function handleSendSpecificWord(
+  _: IpcMainEvent,
+  arr: Array<{ uid: string }>,
+) {
+  const wordId = arr[0];
+
+  const { wordDetails }: { wordDetails: Word } =
+    await fetcher(`word/${wordId}`);
+  mainWindow.webContents.send("get-word", wordDetails);
+}
+
+async function handleAddHeart(
+  _: IpcMainEvent,
+  arr: Array<{ uid: string }>,
+) {
+  const payload = arr[0];
+  fetcher(`word/like`, payload).then(console.log).catch(console.error);
+}
+async function handleRemoveHeart(
+  _: IpcMainEvent,
+  arr: Array<{ uid: string }>,
+) {
+  const payload = arr[0];
+  fetcher(`word/like`, payload).then(console.log).catch(console.error);
+}
+

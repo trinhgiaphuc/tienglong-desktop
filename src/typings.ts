@@ -51,6 +51,7 @@ export type RequestChannels =
   | 'logout'
   | 'set-auth'
   | 'create-word'
+  | 'fetch-word'
   | 'add-heart'
   | 'remove-heart'
   | 'login-admin'
@@ -58,7 +59,7 @@ export type RequestChannels =
   | 'delete-word'
   | 'send-chat-admin'
 
-export type ResponseChannels = 'today-words' | 'trending-words' | 'login-status' | 'user-data' | 'user-words' | 'clear-caches' | 'words-and-hearts';
+export type ResponseChannels = 'today-words' | 'trending-words' | 'login-status' | 'user-data' | 'user-words' | 'clear-caches' | 'words-and-hearts' | 'get-word';
 
 export type WordsAndHearts = {
   words: number;

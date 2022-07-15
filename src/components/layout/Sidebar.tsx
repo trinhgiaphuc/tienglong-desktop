@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import {
-  adminIcon,
+  // adminIcon,
   feedbackIcon,
   homeIcon,
   ideaIcon,
@@ -31,11 +31,11 @@ const routes: Array<PageRoute> = [
     name: 'Định nghĩa',
     iconSrc: ideaIcon,
   },
-  {
-    path: '/admin',
-    name: 'Quản Trị',
-    iconSrc: adminIcon,
-  },
+  // {
+  //   path: '/admin',
+  //   name: 'Quản Trị',
+  //   iconSrc: adminIcon,
+  // },
   {
     path: 'feedback',
     name: 'Phản Hồi',

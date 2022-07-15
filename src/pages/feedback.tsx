@@ -15,7 +15,7 @@ export default function FeedbackPage() {
             </h2>
             <div className="text-gray-700 mt-8">
               Bạn không thích form? Kết nối trực tiếp với chúng tôi qua{' '}
-              <span className="underline">email</span> mọi lúc mọi nơi .
+              <a href="mailto:trinhphuc0509@gmail.com"><span className="underline">email</span> mọi lúc mọi nơi .</a>
             </div>
           </div>
           <div className="mt-8 text-center">

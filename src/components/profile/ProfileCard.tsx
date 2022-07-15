@@ -1,15 +1,26 @@
 import * as React from "react";
+import { fetchImage } from "../../lib/firebase";
 
 import { medalIcon, newMemberIcon } from "../../assets/icons";
 import type { UserDetails } from "../../typings";
 import AddHotWord from "../buttons/AddHotWord";
+
+type HighLights = { highlight1: string; highlight2: string }
 
 export default function ProfileCard({
   userDetails,
 }: {
   userDetails: UserDetails;
 }) {
-  const { image, username, hearts = -2, words = -2 } = userDetails;
+  const { image, username, hearts = -2, words = -2, id } = userDetails;
+  const [highlights, setHighlights] = React.useState<HighLights>({ highlight1: '', highlight2: '' });
+
+
+
+  Promise.all([
+    fetchImage(id, 1),
+    fetchImage(id, 2)
+  ]).then(res => setHighlights({ highlight1: res[0], highlight2: res[1] }));
 
   return (
     <aside className="font-ole">
@@ -52,17 +63,16 @@ export default function ProfileCard({
       </div>
 
       <div className="mt-5 space-x-4 flex justify-center items-center w-full">
-        <AddHotWord />
-        <AddHotWord />
+        <AddHotWord word={1} imgSrc={highlights.highlight1} />
+        <AddHotWord word={2} imgSrc={highlights.highlight2} />
 
-        {/* <HotWord bgColor="bg-gradient-to-t from-red-400 to-yellow-300" /> */}
-        {/* <HotWord bgColor="bg-gradient-to-t from-blue-500 to-yellow-400" /> */}
       </div>
     </aside>
   );
 }
 
 function HotWord({ bgColor }: { bgColor: string }) {
+
   return (
     <div className="relative flex flex-col justify-between bg-white rounded-3xl bg-cover text-gray-800 overflow-hidden cursor-pointer w-full object-cover object-center h-64 my-2 hot">
       <div
@@ -108,4 +118,3 @@ function HotWord({ bgColor }: { bgColor: string }) {
     </div>
   );
 }
-

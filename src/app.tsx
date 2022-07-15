@@ -12,7 +12,7 @@ import {
 import { Sidebar, Template } from "./components/layout";
 
 import {
-  AdminPage,
+  // AdminPage,
   DefinePage,
   FeedbackPage,
   HomePage,
@@ -21,6 +21,7 @@ import {
 } from "./pages";
 import UserProvider, { useUser } from "./lib/userContext";
 import type { TodayWords, UserDetails, Word, TrendingWords } from "./typings";
+import SpecificWordPage from "./pages/specific-word";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 function App() {
@@ -69,9 +70,11 @@ function App() {
           path="/main_window"
           element={<HomePage todayWords={todayWords} trendingWords={trendingWords} />}
         />
+        <Route path="/word/:wordId" element={<SpecificWordPage />} />
+        <Route path="/user/:userId" element={<ProfilePage />} />
         <Route path="/me" element={<ProfilePage />} />
         <Route path="/feedback" element={<FeedbackPage />} />
-        <Route path="/admin" element={<AdminPage />} />
+        {/* <Route path="/admin" element={<AdminPage />} /> */}
         <Route path="/define" element={<DefinePage />} />
       </Routes>
     </Template>
